@@ -1,7 +1,7 @@
 services:
   etl:
     build: .
-    container_name: weather_etl
+    container_name: finances-etl
     restart: always
     volumes:
       - .:/app
@@ -13,7 +13,7 @@ services:
 
   postgres:
     image: postgres:15-alpine
-    container_name: weather_postgres
+    container_name: finances-postgres
     restart: always
     environment:
       POSTGRES_USER: ${DB_USER}
@@ -29,7 +29,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: weather_pgadmin
+    container_name: finances-pgadmin
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}

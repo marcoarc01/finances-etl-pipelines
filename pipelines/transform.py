@@ -75,14 +75,8 @@ if __name__ == "__main__":
     arquivo = get_latest_raw_file()
     
     df_raw = load_data(arquivo)
-    
-    print(df_raw.head())
-    print(df_raw.info())
 
     df_load = transform_data(df_raw)
-    
-    print(df_load.head())
-    print(df_load.info())
 
     save_processed_data(df_load)
     

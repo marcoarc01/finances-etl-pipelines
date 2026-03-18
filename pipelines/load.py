@@ -1,0 +1,59 @@
+import pandas as pd
+import glob
+import os
+from sqlalchemy import create_engine
+
+# Localizar o arquivo processado mais recente
+def get_latest_processed_file():
+    files = glob.glob("data/processed/*.csv")
+    
+    if not files:
+        print("Nenhum arquivo encontrado na pasta data/processed/")
+        return None
+
+    return max(files, key=os.path.getctime)
+
+# Criar a conexão com o PostgreSQL
+def get_database_engine():
+    user = os.environ.get('DB_USER')
+    password = os.environ.get('DB_PASSWORD')
+    host = 'finances-postgres'
+    port = '5432'
+    db = os.environ.get('DB_NAME')
+
+    # Montamos a URI
+    connection_string = f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{db}"
+    
+    engine = create_engine(connection_string)
+    return engine
+
+
+# Carregar o dado no Banco de Dados
+def load_data_to_postgres(df, engine):
+    if df is None:
+        print("DataFrame vazio")
+        return
+
+    try:
+        # histórico de moedas
+        df.to_sql('cambio_moedas', con=engine, if_exists='append', index=False)
+        print(f"{len(df)} linhas inseridas na tabela 'cambio_moedas'!")
+
+    except Exception as e:
+        print(f" Erro ao carregar no banco: {e}")
+
+
+
+if __name__ == "__main__":
+    print("Iniciando a carga dos dados no PostgreSQL.")
+    
+    arquivo_csv = get_latest_processed_file()
+    if arquivo_csv:
+        df = pd.read_csv(arquivo_csv)
+    
+    
+    engine = get_database_engine()
+    
+    load_data_to_postgres(df, engine)
+
+    print("Carga finalizada! Dados disponíveis no banco.")

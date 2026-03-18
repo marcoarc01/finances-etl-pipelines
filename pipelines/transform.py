@@ -38,10 +38,12 @@ def transform_data(df):
     
     print("iniciando a transformação dos dados")
     
-    df = df[['name', 'bid', 'pctChange', 'create_date']]
+    df = df.reset_index()
+
+    df = df[['index', 'name', 'bid', 'pctChange', 'create_date']]
     
     # renomear as colunas
-    df.columns = ['nome_moeda', 'cotacao', 'variacao', 'data_cotacao']
+    df.columns = ['moeda_sigla', 'nome_moeda', 'cotacao', 'variacao', 'data_cotacao']
     
     # converter os tipos de dados
     df['cotacao'] = pd.to_numeric(df['cotacao'])

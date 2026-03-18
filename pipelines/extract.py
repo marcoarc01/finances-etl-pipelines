@@ -31,7 +31,7 @@ else:
         
         print(f"dados extraidos com sucesso. salvo como: {filename}")
     
-    #erro na requisicao
+    
     except Exception as e:
         print("falha na requisicao")
         

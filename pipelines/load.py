@@ -11,7 +11,10 @@ def get_latest_processed_file():
         print("Nenhum arquivo encontrado na pasta data/processed/")
         return None
 
-    return max(files, key=os.path.getctime)
+    arquivo_mais_novo = max(files)
+    
+    print(f"Arquivo selecionado para carga: {arquivo_mais_novo}")
+    return arquivo_mais_novo
 
 # Criar a conexão com o PostgreSQL
 def get_database_engine():
@@ -50,6 +53,8 @@ if __name__ == "__main__":
     arquivo_csv = get_latest_processed_file()
     if arquivo_csv:
         df = pd.read_csv(arquivo_csv)
+        df['data_cotacao'] = pd.to_datetime(df['data_cotacao'])
+        df['data_processamento'] = pd.to_datetime(df['data_processamento'])
     
     
     engine = get_database_engine()
